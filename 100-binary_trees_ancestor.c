@@ -13,40 +13,25 @@ const binary_tree_t *second)
 {
 if (first == NULL || second == NULL)
 return (NULL);
-if (first == second)
-return ((binary_tree_t *)first);
 
-binary_tree_t *path_first[100] = {NULL};
-binary_tree_t *path_second[100] = {NULL};
+binary_tree_t *ancestor1 = (binary_tree_t *)first;
+binary_tree_t *ancestor2 = (binary_tree_t *)second;
 
-int len_first = 0, len_second = 0;
-const binary_tree_t *temp = first;
-
-while (temp != NULL)
+while (ancestor1 != ancestor2)
 {
-path_first[len_first++] = (binary_tree_t *)temp;
-temp = temp->parent;
+
+ancestor1 = ancestor1->parent;
+ancestor2 = ancestor2->parent;
+
+if (ancestor1 == NULL && ancestor2 == NULL)
+return (NULL);
+
+
+if (ancestor1 == NULL)
+ancestor1 = (binary_tree_t *)second;
+if (ancestor2 == NULL)
+ancestor2 = (binary_tree_t *)first;
 }
 
-temp = second;
-while (temp != NULL)
-{
-path_second[len_second++] = (binary_tree_t *)temp;
-temp = temp->parent;
-}
-
-int i = len_first - 1;
-int j = len_second - 1;
-
-binary_tree_t *ancestor = NULL;
-
-while (i >= 0 && j >= 0)
-{
-if (path_first[i] != path_second[j])
-break;
-ancestor = path_first[i];
-i--;
-j--;
-}
-return (ancestor);
+return (ancestor1);
 }
